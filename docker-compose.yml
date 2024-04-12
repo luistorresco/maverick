@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  mi_api:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=mysql://u317228138_stores:123$qwmnB@db/u317228138_stores
+
+  db:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_DATABASE=u317228138_stores
+      - MYSQL_USER=u317228138_stores
+      - MYSQL_PASSWORD=123$qwmnB
+      - MYSQL_ROOT_PASSWORD=123456789
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
