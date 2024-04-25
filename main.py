@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
 import mysql.connector
 import time
+from fastapi.openapi.utils import get_openapi
 
 # Configuración de la conexión a la base de datos MySQL
 def establish_database_connection():
@@ -119,7 +120,7 @@ async def read_shoes_by_color(color: str = Query(None, description="Filter shoes
         raise HTTPException(status_code=404, detail="No shoes found")
     return shoes
 
-@app.put("/shoes/{shoe_id} ", tags=["Shoes"], summary="Update a shoe", description="Update an existing shoe item.")
+@app.put("/shoes/{shoe_id}", tags=["Shoes"], summary="Update a shoe", description="Update an existing shoe item.")
 async def update_shoe(shoe_id: int, shoe: Shoe):
     sql = "UPDATE shoes SET brand=%s, model=%s, size=%s, color=%s WHERE id=%s"
     val = (shoe.brand, shoe.model, shoe.size, shoe.color, shoe_id)
