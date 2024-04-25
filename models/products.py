@@ -1,8 +1,8 @@
-from sqlalchemy import table, column, metadata
+from sqlalchemy import table, column, MetaData
 from sqlalchemy.sql.sqltypes import Integer, String
 from config.db import meta
 
-
+meta = MetaData()
 products = table('products',  meta, column( 
                 'id', Integer, primary_key=True), 
                 column('name', String(255)),
