@@ -80,13 +80,14 @@ async def read_shoes():
     shoes = mycursor.fetchall()
     return shoes
 
-@app.get("/shoes/{shoe_id}")
-async def read_shoe(shoe_id: int):
-    mycursor.execute("SELECT * FROM shoes WHERE id = %s", (shoe_id,))
-    shoe = mycursor.fetchone()
-    if not shoe:
-        raise HTTPException(status_code=404, detail="Shoe not found")
-    return shoe
+@app.get("/shoes")
+async def read_shoes():
+    mycursor.execute("SELECT * FROM shoes")
+    shoes = mycursor.fetchall()
+    if not shoes:
+        raise HTTPException(status_code=404, detail="No shoes found")
+    return shoes
+
 
 @app.put("/shoes/{shoe_id}")
 async def update_shoe(shoe_id: int, shoe: Shoe):
