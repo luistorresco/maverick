@@ -2,7 +2,6 @@ from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
 import mysql.connector
 
-
 # Conexión a la base de datos MySQL
 mydb = mysql.connector.connect(
     host="62.72.50.52",
@@ -47,12 +46,6 @@ else:
             alter_table_statement = "ALTER TABLE shoes ADD {} {}".format(column_name, column_type)
             mycursor.execute(alter_table_statement)
 
-# Si estás usando transacciones, asegúrate de hacer commit de los cambios.
-# connection.commit()  # Asumiendo que 'connection' es tu objeto de conexión a la base de datos.
-
-        
-# No olvides aplicar los cambios con commit si es necesario
-# connection.commit()  # Asumiendo que 'connection' es tu objeto de conexión a la base de datos
 # Definición del modelo de datos
 class Shoe(BaseModel):
     image: str
@@ -80,14 +73,16 @@ async def read_shoes():
     shoes = mycursor.fetchall()
     return shoes
 
-@app.get("/shoes")
-async def read_shoes():
-    mycursor.execute("SELECT * FROM shoes")
+@app.get("/shoes", tags=["search"])
+async def read_shoes_by_color(color: str = Query(None)):
+    if color:
+        mycursor.execute("SELECT * FROM shoes WHERE color = %s", (color,))
+    else:
+        mycursor.execute("SELECT * FROM shoes")
     shoes = mycursor.fetchall()
     if not shoes:
         raise HTTPException(status_code=404, detail="No shoes found")
     return shoes
-
 
 @app.put("/shoes/{shoe_id}")
 async def update_shoe(shoe_id: int, shoe: Shoe):
@@ -102,12 +97,3 @@ async def delete_shoe(shoe_id: int):
     mycursor.execute("DELETE FROM shoes WHERE id = %s", (shoe_id,))
     mydb.commit()
     return {"message": "Shoe deleted successfully"}
-
-@app.get("/shoes/")
-async def read_shoes(color: str = Query(None)):
-    if color:
-        mycursor.execute("SELECT * FROM shoes WHERE color = %s", (color,))
-    else:
-        mycursor.execute("SELECT * FROM shoes")
-    shoes = mycursor.fetchall()
-    return shoes
