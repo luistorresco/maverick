@@ -20,7 +20,7 @@ const App = () => {
     const fetchShoes = async () => {
       try {
         const response = await fetch(
-          "https://maverick-fs8k.onrender.com/shoes"
+          "https://maverick-fs8k.onrender.com/shoes/"
         );
         const data = await response.json();
         setShoes(data);
