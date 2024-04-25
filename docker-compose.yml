@@ -1,14 +1,23 @@
 version: '3.8'
 
 services:
-  mi_api:
+  app:
+    image: "yoes/reto_maverick:1.0"
     build: .
     ports:
       - "8000:8000"
     depends_on:
       - db
     environment:
-      - DATABASE_URL=mysql://u317228138_stores:123$qwmnB@db/u317228138_stores
+      - DATABASE_URL=mysql://u317228138_stores:123qwmnB@db/u317228138_stores
+      - MYSQL_DATABASE=u317228138_stores
+      - MYSQL_USER=u317228138_stores
+      - MYSQL_PASSWORD=123qwmnB
+      - MYSQL_ROOT_PASSWORD=123456789
+
+    networks:
+      - app-network
+
 
   db:
     image: mysql:5.7
@@ -17,10 +26,16 @@ services:
     environment:
       - MYSQL_DATABASE=u317228138_stores
       - MYSQL_USER=u317228138_stores
-      - MYSQL_PASSWORD=123$qwmnB
+      - MYSQL_PASSWORD=123qwmnB
       - MYSQL_ROOT_PASSWORD=123456789
     volumes:
       - db_data:/var/lib/mysql
+    networks:
+      - app-network
+
+
+networks:
+  app-network:
 
 volumes:
   db_data:
