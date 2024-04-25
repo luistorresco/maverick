@@ -67,7 +67,17 @@ async def create_shoe(shoe: Shoe):
 async def read_shoes():
     query = "SELECT * FROM shoes"
     shoes = execute_query_with_retry(query)
-    return shoes
+    formatted_shoes = []
+    for shoe in shoes:
+        formatted_shoe = {
+            "albumId": 1,
+            "id": shoe[0],
+            "title": f"{shoe[1]} {shoe[2]}",
+            "url": shoe[5],
+            "thumbnailUrl": shoe[5]  # Usar la misma URL para la miniatura por ahora
+        }
+        formatted_shoes.append(formatted_shoe)
+    return formatted_shoes
 
 @app.get("/shoes", tags=["search"])
 async def read_shoes_by_color(color: str = Query(None)):
