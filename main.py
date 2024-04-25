@@ -3,6 +3,7 @@ from pydantic import BaseModel
 import mysql.connector
 import time
 from fastapi.openapi.utils import get_openapi
+from fastapi.middleware.cors import CORSMiddleware
 
 # Configuración de la conexión a la base de datos MySQL
 def establish_database_connection():
@@ -82,6 +83,14 @@ def custom_openapi():
     return app.openapi_schema
 
 app.openapi = custom_openapi
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Rutas CRUD para la entidad "zapatos"
 @app.post("/shoes/", tags=["Shoes"], summary="Create a new shoe", description="Create a new shoe item with the provided details.")
