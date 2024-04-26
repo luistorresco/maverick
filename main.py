@@ -92,53 +92,73 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Rutas CRUD para la entidad "zapatos"
-@app.post("/shoes/", tags=["Shoes"], summary="Create a new shoe", description="Create a new shoe item with the provided details.")
-async def create_shoe(shoe: Shoe):
+# # Rutas CRUD para la entidad "zapatos"
+@app.post("/shoes/", tags=["Shoes"], summary="Crear un nuevo zapato", description="Crear un nuevo elemento de zapato con los detalles proporcionados.")
+async def create_shoe(shoe: dict):
     sql = "INSERT INTO shoes (brand, model, size, color) VALUES (%s, %s, %s, %s)"
-    val = (shoe.brand, shoe.model, shoe.size, shoe.color)
-    execute_query_with_retry(sql, val)
-    return {"message": "Shoe created successfully"}
+    val = (shoe.get("brand"), shoe.get("model"), shoe.get("size"), shoe.get("color"))
+    try:
+        execute_query_with_retry(sql, val)
+    except:
+        raise HTTPException(status_code=400, detail="Error al crear el zapato")
+    return {"message": "Zapato creado exitosamente"}
 
-@app.get("/shoes/", tags=["Shoes"], summary="Read all shoes", description="Retrieve all shoe items.")
+@app.get("/shoes/", tags=["Shoes"], summary="Leer todos los zapatos", description="Recuperar todos los elementos de zapato.")
 async def read_shoes():
     query = "SELECT * FROM shoes"
-    shoes = execute_query_with_retry(query)
-    formatted_shoes = []
-    for shoe in shoes:
-        formatted_shoe = {
-            "id": shoe[0],
-            "brand": shoe[1],
-            "model": shoe[2],
-            "size": shoe[3],
-            "color": shoe[4],
-            "image": shoe[5],
-        }
-        formatted_shoes.append(formatted_shoe)
-    return formatted_shoes
+    try:
+        shoes = execute_query_with_retry(query)
+        if not shoes:
+            raise HTTPException(status_code=404, detail="No se encontraron zapatos")
+        formatted_shoes = []
+        for shoe in shoes:
+            formatted_shoe = {
+                "id": shoe[0],
+                "brand": shoe[1],
+                "model": shoe[2],
+                "size": shoe[3],
+                "color": shoe[4],
+                "image": shoe[5],
+            }
+            formatted_shoes.append(formatted_shoe)
+        return formatted_shoes
+    except:
+        raise HTTPException(status_code=500, detail="Error al recuperar los zapatos")
 
-@app.get("/shoes", tags=["Search"], summary="Search shoes by color", description="Retrieve shoe items filtered by color.")
-async def read_shoes_by_color(color: str = Query(None, description="Filter shoes by color")):
+@app.get("/shoes", tags=["Search"], summary="Buscar zapatos por color", description="Recuperar elementos de zapato filtrados por color.")
+async def read_shoes_by_color(color: str = Query(None, description="Filtrar zapatos por color")):
     if color:
         query = "SELECT * FROM shoes WHERE color = %s"
-        shoes = execute_query_with_retry(query, (color,))
+        try:
+            shoes = execute_query_with_retry(query, (color,))
+        except:
+            raise HTTPException(status_code=500, detail="Error al recuperar los zapatos")
     else:
         query = "SELECT * FROM shoes"
-        shoes = execute_query_with_retry(query)
+        try:
+            shoes = execute_query_with_retry(query)
+        except:
+            raise HTTPException(status_code=500, detail="Error al recuperar los zapatos")
     if not shoes:
-        raise HTTPException(status_code=404, detail="No shoes found")
+        raise HTTPException(status_code=404, detail="No se encontraron zapatos")
     return shoes
 
-@app.put("/shoes/{shoe_id}", tags=["Shoes"], summary="Update a shoe", description="Update an existing shoe item.")
-async def update_shoe(shoe_id: int, shoe: Shoe):
+@app.put("/shoes/{shoe_id}", tags=["Shoes"], summary="Actualizar un zapato", description="Actualizar un elemento de zapato existente.")
+async def update_shoe(shoe_id: int, shoe: dict):
     sql = "UPDATE shoes SET brand=%s, model=%s, size=%s, color=%s WHERE id=%s"
-    val = (shoe.brand, shoe.model, shoe.size, shoe.color, shoe_id)
-    execute_query_with_retry(sql, val)
-    return {"message": "Shoe updated successfully"}
+    val = (shoe.get("brand"), shoe.get("model"), shoe.get("size"), shoe.get("color"), shoe_id)
+    try:
+        execute_query_with_retry(sql, val)
+    except:
+        raise HTTPException(status_code=400, detail="Error al actualizar el zapato")
+    return {"message": "Zapato actualizado exitosamente"}
 
-@app.delete("/shoes/{shoe_id}", tags=["Shoes"], summary="Delete a shoe", description="Delete an existing shoe item.")
+@app.delete("/shoes/{shoe_id}", tags=["Shoes"], summary="Eliminar un zapato", description="Eliminar un elemento de zapato existente.")
 async def delete_shoe(shoe_id: int):
     sql = "DELETE FROM shoes WHERE id = %s"
     val = (shoe_id,)
-    execute_query_with_retry(sql, val)
-    return {"message": "Shoe deleted successfully"}
+    try:
+        execute_query_with_retry(sql, val)
+    except:
+        raise HTTPException(status_code=400, detail="Error al eliminar el zapato")
+    return {"message": "Zapato eliminado exitosamente"}Rutas CRUD para la entidad "zapatos"
