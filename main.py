@@ -95,11 +95,12 @@ app.add_middleware(
 # # Rutas CRUD para la entidad "zapatos"
 @app.post("/shoes/", tags=["Shoes"], summary="Crear un nuevo zapato", description="Crear un nuevo elemento de zapato con los detalles proporcionados.")
 async def create_shoe(shoe: dict):
-    sql = f"INSERT INTO shoes (brand, model, size, color) VALUES ('{shoe.get('brand')}', '{shoe.get('model')}', {shoe.get('size')}, '{shoe.get('color')}')"
+    sql = "INSERT INTO shoes (brand, model, size, color) VALUES (%s, %s, %s, %s)"
+    val = (shoe.get('brand'), shoe.get('model'), shoe.get('size'), shoe.get('color'))
     try:
-        execute_query_with_retry(sql)
-    except:
-        raise HTTPException(status_code=400, detail="Error al crear el zapato")
+        execute_query_with_retry(sql, val)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail="Error al crear el zapato") from e
     return {"message": "Zapato creado exitosamente"}
 
 @app.get("/shoes/", tags=["Shoes"], summary="Leer todos los zapatos", description="Recuperar todos los elementos de zapato.")
