@@ -161,4 +161,4 @@ async def delete_shoe(shoe_id: int):
         execute_query_with_retry(sql, val)
     except:
         raise HTTPException(status_code=400, detail="Error al eliminar el zapato")
-    return {"message": "Zapato eliminado exitosamente"}Rutas CRUD para la entidad "zapatos"
+    return {"message": "Zapato eliminado exitosamente"}
