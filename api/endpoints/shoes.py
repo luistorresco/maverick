@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from core.database import execute_query_with_retry 
 from models.shoe import Shoe
+from fastapi import Query
 
 router = APIRouter()
 
@@ -23,7 +24,7 @@ async def create_shoe(shoe: Shoe):
     return {"message": "Zapato creado exitosamente"}
 
 
-@app.get(
+@router.get(
     "/shoes/",
     tags=["Shoes"],
     summary="Leer todos los zapatos",
@@ -55,7 +56,7 @@ async def read_shoes():
         ) from e
 
 
-@app.get(
+@router.get(
     "/shoes",
     tags=["Search"],
     summary="Buscar zapatos por color",
@@ -114,7 +115,7 @@ async def read_shoes_by_color(
             ) from e
 
 
-@app.put(
+@router.put(
     "/shoes/{shoe_id}",
     tags=["Shoes"],
     summary="Actualizar un zapato",
@@ -134,7 +135,7 @@ async def update_shoe(shoe_id: int, shoe: Shoe):
     return {"message": "Zapato actualizado exitosamente"}
 
 
-@app.delete(
+@router.delete(
     "/shoes/{shoe_id}",
     tags=["Shoes"],
     summary="Eliminar un zapato",
