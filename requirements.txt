@@ -6,3 +6,5 @@ pymysql
 virtualenv
 pymysql
 mysql-connector-python
+python-dotenv
+
