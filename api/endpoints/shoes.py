@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from core.database import execute_query_with_retry
+from core.database import execute_query_with_retry 
 from models.shoe import Shoe
 
 router = APIRouter()
