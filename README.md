@@ -26,6 +26,22 @@ Puedes encontrar más detalles sobre cómo usar cada ruta en la documentación d
 
 La documentación de la API está disponible en `/docs` y `/redoc`. Puedes acceder a ella en tu navegador después de ejecutar la aplicación.
 
+## Estructura de Carpetas
+app/
+├── api/
+│   ├── __init__.py
+│   ├── endpoints/
+│   │   ├── __init__.py
+│   │   ├── shoes.py
+├── core/
+│   ├── __init__.py
+│   ├── database.py
+├── models/
+│   ├── __init__.py
+│   ├── shoe.py
+├── main.py
+
+
 ## Changelog
 
 ### [2.3.1] - 25 de abril de 2024

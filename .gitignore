@@ -1,0 +1,13 @@
+# Archivos de Byte de Python
+*.pyc
+__pycache__/
+
+# Entornos virtuales (por ejemplo, virtualenv, pipenv, etc.)
+venv/
+env/
+.env/
+
+# Dependencias instaladas
+lib/
+libs/
+bin/
