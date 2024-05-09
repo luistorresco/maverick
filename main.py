@@ -4,14 +4,19 @@ import mysql.connector
 import time
 from fastapi.openapi.utils import get_openapi
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
+import os
+
+# Cargar variables de entorno desde el archivo .env
+load_dotenv()
 
 # Configuración de la conexión a la base de datos MySQL
 def establish_database_connection():
     return mysql.connector.connect(
-        host="62.72.50.52",
-        user="u317228138_store",
-        password="1234567890qwertyuiop.M",
-        database="u317228138_marketplace",
+        host=os.getenv("DB_HOST"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
+        database=os.getenv("DB_NAME"),
     )
 
 # Función para ejecutar una consulta con reintento
