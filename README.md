@@ -53,6 +53,12 @@ La documentación de la API está disponible en `/docs` y `/redoc`. Puedes acced
 
 
 ## Changelog
+### [2.3.2] - 9 de mayo de 2024
+#### Cambios
+- Corregido un error en un endpoint específico.
+- Mejoras en la consulta a la base de datos.
+- Se agregó un nuevo endpoint para recuperar todos los elementos.
+- Resolución de conflictos en el archivo requirements.txt
 
 ### [2.3.1] - 25 de abril de 2024
 #### Cambios
